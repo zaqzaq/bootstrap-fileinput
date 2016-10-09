@@ -47,3 +47,7 @@ bootstrap-fileinput
         console.log(data.response)
     });
 
+## 上传服务器后台 关键代码
+   `String retVal=Urlencode.encode(returnJson);
+   response.sendRedirect(redirect+"?\"retVal\"")
+   注：redirect 为前台的入参回调url`
