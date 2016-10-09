@@ -24,8 +24,7 @@ bootstrap-fileinput
    `<input id="filePicker" type="file" class="file-loading" title="选择图片">`
    
 ## JS DEMO 上传文件
-    ` 
-    $("input[type='file']").fileinput({
+    `$("input[type='file']").fileinput({
         language : 'zh',
         uploadUrl: uploadUrl,
         initialPreview: initialPreviewArray,
