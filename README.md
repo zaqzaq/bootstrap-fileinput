@@ -52,4 +52,4 @@ bootstrap-fileinput
    
    `response.sendRedirect(redirect+"?\"retVal\"")`
    
-   `注：redirect 为前台的入参回调url`
+   `注：redirect 为前台的入参回调url ,returnJson 上传后返回的消息`
