@@ -22,5 +22,30 @@ bootstrap-fileinput
     
 ## html UI节点    
    `<input id="filePicker" type="file" class="file-loading" title="选择图片">`
-    
+   
+## JS DEMO 上传文件
+    ` 
+    $("input[type='file']").fileinput({
+        language : 'zh',
+        uploadUrl: uploadUrl,
+        initialPreview: initialPreviewArray,
+        initialPreviewAsData: true,
+        initialPreviewFileType: 'image',
+        overwriteInitial: true,
+        ajaxSettings:{
+            extraData:{
+                redirect:location.origin+"/fileinput/cors/result.html"
+            }
+        },
+        allowedFileExtensions : ['jpg', 'png','gif','jpeg','bmp'],
+        allowedFileTypes: ['image'],
+        showUpload: false,
+        slugCallback: function(filename) {//选择后未上传前 回调方法
+            return filename.replace('(', '_').replace(']', '_');
+        }
+    }).on("fileuploaded", function(event, data){//上传成功事件
+        console.log("上传成功")
+        console.log(data.response)
+    });
+    `
 
