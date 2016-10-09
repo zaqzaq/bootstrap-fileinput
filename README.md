@@ -12,7 +12,7 @@ bootstrap-fileinput
 ## 需要 引入的 文件
    `<link href="css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />`
    
-   `<link href="css/bootstrap3.css" media="all" rel="stylesheet" type="text/css" />`
+   `<link href="css/bootstrap3.css" media="all" rel="stylesheet" type="text/css" /> //针对bootstrap 2+ 版本`
    
    `<script src="js/fileinput.js" type="text/javascript"></script>`
     
