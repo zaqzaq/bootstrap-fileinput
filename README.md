@@ -21,32 +21,39 @@ bootstrap-fileinput  support cors-Domain
    `<script src="js/jquery.iframe-transport.js" type="text/javascript"></script>`
     
 ## html UI节点    
-   `<input id="filePicker" type="file" class="file-loading" title="选择图片">`
+   `<input type="hidden" name="icon" id="fileSrc" class="required icon">`
+
+   `<input id="filePicker" type="file" class="file-loading" srcSelector="#fileSrc" title="选择图片">`
    
 ## JS DEMO 上传文件
-    $("input[type='file']").fileinput({
-        language : 'zh',
-        uploadUrl: uploadUrl,
-        initialPreview: initialPreviewArray,
-        initialPreviewAsData: true,
-        initialPreviewFileType: 'image',
-        overwriteInitial: true,
-        ajaxSettings:{
-            extraData:{
-                redirect:location.origin+"/fileinput/cors/result.html"
-            }
-        },
-        allowedFileExtensions : ['jpg', 'png','gif','jpeg','bmp'],
-        allowedFileTypes: ['image'],
-        showUpload: false,
-        slugCallback: function(filename) {//选择后未上传前 回调方法
-            return filename.replace('(', '_').replace(']', '_');
-        }
-    }).on("fileuploaded", function(event, data){//上传成功事件
-        console.log("上传成功")
-        console.log(data.response)
-    });
-
+      $(function(){
+          $("input[type='file']").fileinput({
+              language : 'zh',
+              uploadUrl: uploadUrl,
+              initialPreview: initialPreviewArray,
+              initialPreviewAsData: true,
+              initialPreviewFileType: 'image',
+              overwriteInitial: true,
+              ajaxSettings:{
+                  extraData:{
+                      redirect:location.origin+"/fileinput/cors/result.html"
+                  }
+              },
+              allowedFileExtensions : ['jpg', 'png','gif','jpeg','bmp'],
+              allowedFileTypes: ['image'],
+              showUpload: false,
+              slugCallback: function(filename) {//选择后未上传前 回调方法
+                  return filename.replace('(', '_').replace(']', '_');
+              }
+          }).on("fileuploaded", function(event, data){//上传成功事件
+              console.log("上传成功")
+              console.log(data.response)
+              if(data.response)
+              {
+                  $($(this).attr('srcSelector')).val(data.response.src);
+              }
+          });
+        })
 ## 上传服务器后台 关键代码
    `String retVal=Urlencode.encode(returnJson);`
    
