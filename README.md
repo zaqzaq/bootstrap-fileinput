@@ -53,3 +53,8 @@ bootstrap-fileinput
    `response.sendRedirect(redirect+"?\"retVal\"")`
    
    `注：redirect 为前台的入参回调url ,returnJson 上传后返回的消息`
+   
+### 贴上 修改 动态修改 fileinput 配置属性 的demo代码
+   `$("input[type='file']").data('fileinput').options.uploadUrl=“xxx.xx” //将上传的路径修改成xxx.xx`
+   
+   
