@@ -20,4 +20,7 @@ bootstrap-fileinput
    
    `<script src="js/jquery.iframe-transport.js" type="text/javascript"></script>`
     
+## html UI节点    
+   `<input id="filePicker" type="file" class="file-loading" title="选择图片">`
+    
 
