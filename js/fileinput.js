@@ -1599,10 +1599,35 @@
             }
             return xhrobj;
         },
+        /**
+         * 是否跨域 add by zyj
+         * @param uploadUrl
+         * @returns {boolean}
+         * @private
+         */
+        _isCrossDomain:function(uploadUrl){
+            var targetHost = $('<a></a>').prop('href', uploadUrl).prop('host');
+
+            if( targetHost !== location.host) {
+                return true;
+            }else{
+                return false;
+            }
+        },
+        /**
+         * 如果是跨域 上传文件 的 处理方式 add by zyj
+         * @param options
+         * @private
+         */
+        _initIframeSettings: function (options) {
+            if(this._isCrossDomain(options.url)){
+                options.dataType = 'iframe ' + (options.dataType || '');
+            }
+        },
         _ajaxSubmit: function (fnBefore, fnSuccess, fnComplete, fnError, previewId, index) {
             var self = this, settings;
             self._raise('filepreajax', [previewId, index]);
-            self._uploadExtra(previewId, index);
+            //self._uploadExtra(previewId, index);
             settings = $.extend(true, {}, {
                 xhr: function () {
                     var xhrobj = $.ajaxSettings.xhr();
@@ -1612,6 +1637,8 @@
                 type: 'POST',
                 dataType: 'json',
                 data: self.formdata,
+                paramName:self.uploadFileAttr,//add by zyj
+                fileInput: self.$element,//add by zyj
                 cache: false,
                 processData: false,
                 contentType: false,
@@ -1620,6 +1647,8 @@
                 complete: fnComplete,
                 error: fnError
             }, self.ajaxSettings);
+
+            self._initIframeSettings(settings)//add by zyj
             self.ajaxRequests.push($.ajax(settings));
         },
         _initUploadSuccess: function (out, $thumb, allFiles) {
@@ -1773,7 +1802,9 @@
                     $btnDelete.attr('disabled', true);
                 }
                 if (!allFiles) {
-                    self.lock();
+                    if(!self._isCrossDomain(self.uploadUrl)){
+                        self.lock();//FIXME  取不到 file input 上传的文件-_-! add by zyj
+                    }
                 }
                 self._raise('filepreupload', [outData, previewId, i]);
                 $.extend(true, params, outData);
@@ -1856,7 +1887,9 @@
                 self._clearFileInput();
             };
             fnBefore = function (jqXHR) {
-                self.lock();
+                if(!self._isCrossDomain(self.uploadUrl)){
+                    self.lock();//FIXME  清除了 file input 的值-_-! add by zyj
+                }
                 var outData = self._getOutData(jqXHR);
                 if (self.showPreview) {
                     self._getThumbs().each(function () {
@@ -2597,7 +2630,7 @@
                 css = self.isDisabled ? self.captionClass + ' file-caption-disabled' : self.captionClass,
                 caption = self.captionTemplate.replace(/\{class}/g, css + ' kv-fileinput-caption');
             return self.mainTemplate.replace(/\{class}/g, self.mainClass +
-                (!self.showBrowse && self.showCaption ? ' no-browse' : ''))
+                    (!self.showBrowse && self.showCaption ? ' no-browse' : ''))
                 .replace(/\{preview}/g, preview)
                 .replace(/\{close}/g, close)
                 .replace(/\{caption}/g, caption)
@@ -2749,6 +2782,7 @@
             if (self.isUploadable) {
                 self.$container.find('.file-drop-zone .' + self.dropZoneTitleClass).remove();
             }
+
             if (isDragDrop) {
                 tfiles = [];
                 while (files[i]) {
@@ -2769,6 +2803,7 @@
                     tfiles = e.target.files;
                 }
             }
+
             if (isEmpty(tfiles) || tfiles.length === 0) {
                 if (!isAjaxUpload) {
                     self.clear();
@@ -3023,7 +3058,9 @@
             self.uploadCount = 0;
             self.uploadStatus = {};
             self.uploadLog = [];
-            self.lock();
+            if(!self._isCrossDomain(self.uploadUrl)){
+                self.lock();//FIXME  清除了 file input 的值-_-! add by zyj
+            }
             self._setProgress(2);
             if (totLen === 0 && hasExtraData) {
                 self._uploadExtraOnly();
@@ -3088,8 +3125,13 @@
                 if (lang !== 'en' && !isEmpty($.fn.fileinputLocales[lang])) {
                     l = $.fn.fileinputLocales[lang] || {};
                 }
-                opts = $.extend(true, {}, $.fn.fileinput.defaults, t, $.fn.fileinputLocales.en, l, options,
-                    self.data());
+                opts = $.extend(true, {}, $.fn.fileinput.defaults, t, $.fn.fileinputLocales.en, l, options,self.data());
+                if(FileInput.prototype._isCrossDomain(options.uploadUrl)){
+                    opts.dropZoneEnabled=false;//add by zyj 跨域时禁止 桌面拖上传
+                    opts.uploadAsync=true;//add by zyj 跨域 时 多文件全部采用异步一个一个上传
+                    opts.maxFileCount=1;//add by zyj 跨域 时 暂只支持一个单文件上传 TODO 待改造
+                }
+
                 data = new FileInput(this, opts);
                 self.data('fileinput', data);
             }
