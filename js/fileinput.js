@@ -3131,7 +3131,17 @@
                     opts.uploadAsync=true;//add by zyj 跨域 时 多文件全部采用异步一个一个上传
                     opts.maxFileCount=1;//add by zyj 跨域 时 暂只支持一个单文件上传 TODO 待改造
                 }
-
+                
+                if(opts.initialPreview.length==0){//add by zyj 只显示一个图片 TODO 待改造
+                    //初始显示的图片内容
+                    var initialPreviewArray=new Array();
+                    var appIconPreview=$($(this).attr('srcSelector')).val();
+                    if(''!=appIconPreview){
+                        initialPreviewArray.push(appIconPreview);
+                        opts.initialPreview=initialPreviewArray;
+                    }
+                }
+                
                 data = new FileInput(this, opts);
                 self.data('fileinput', data);
             }
