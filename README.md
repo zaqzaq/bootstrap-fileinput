@@ -30,7 +30,6 @@ bootstrap-fileinput  support cors-Domain
           $("input[type='file']").fileinput({
               language : 'zh',
               uploadUrl: uploadUrl,
-              initialPreview: initialPreviewArray,
               initialPreviewAsData: true,
               initialPreviewFileType: 'image',
               overwriteInitial: true,
@@ -50,6 +49,7 @@ bootstrap-fileinput  support cors-Domain
               console.log(data.response)
               if(data.response)
               {
+                  //暂只上传一个文件 TODO 待改造
                   $($(this).attr('srcSelector')).val(data.response.src);
               }
           });
