@@ -468,10 +468,10 @@
     };
     defaultFileTypeSettings = {
         image: function (vType, vName) {
-            return compare(vType, 'image.*') || compare(vName, /\.(gif|png|jpe?g)$/i);
+            return compare(vType, 'image.*') || compare(vName, /\.(bmp|gif|png|jpe?g)$/i);
         },
         html: function (vType, vName) {
-            return compare(vType, 'text/html') || compare(vName, /\.(htm|html)$/i);
+            return compare(vType, 'text/html') || compare(vName, /\.(htm|html|xhtml)$/i);
         },
         text: function (vType, vName) {
             return compare(vType, 'text.*') || compare(vName, /\.(xml|javascript)$/i) ||
@@ -3131,7 +3131,7 @@
                     opts.uploadAsync=true;//add by zyj 跨域 时 多文件全部采用异步一个一个上传
                     opts.maxFileCount=1;//add by zyj 跨域 时 暂只支持一个单文件上传 TODO 待改造
                 }
-                
+
                 if(opts.initialPreview.length==0){//add by zyj 只显示一个图片 TODO 待改造
                     //初始显示的图片内容
                     var initialPreviewArray=new Array();
@@ -3141,7 +3141,29 @@
                         opts.initialPreview=initialPreviewArray;
                     }
                 }
-                
+
+                //add by zyj 扩展 配置 属性 文件后缀
+                var thizAllowedFileExtensions=$(this).attr("allowedFileExtensions");
+                if(thizAllowedFileExtensions){
+                    if(!opts.allowedFileExtensions||null==opts.allowedFileExtensions){
+                        opts.allowedFileExtensions=[]
+                    }
+                    $.each(thizAllowedFileExtensions.split(","), function(index,val) {
+                        opts.allowedFileExtensions.push(val)
+                    })
+                }
+                //add by zyj 扩展 配置 属性 文件类型
+                var thizAllowedFileTypes= $(this).attr("allowedFileTypes")
+                if(thizAllowedFileTypes){
+                    if(!opts.allowedFileTypes||null==opts.allowedFileTypes){
+                        opts.allowedFileTypes=[]
+                    }
+                    $.each(thizAllowedFileTypes.split(","), function(index,val) {
+                        opts.allowedFileTypes.push(val)
+                    })
+                }
+
+
                 data = new FileInput(this, opts);
                 self.data('fileinput', data);
             }
