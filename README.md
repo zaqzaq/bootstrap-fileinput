@@ -23,7 +23,9 @@ bootstrap-fileinput  support cors-Domain
 ## html UI节点    
    `<input type="hidden" name="icon" id="fileSrc" class="required icon">`
 
-   `<input id="filePicker" type="file" class="file-loading" srcSelector="#fileSrc" title="选择图片">`
+   `<input id="filePicker" type="file" allowedFileTypes="image,audio,video" allowedFileExtensions="" class="file-loading" srcSelector="#fileSrc" title="选择图片">`
+   
+   `节点属性加入allowedFileExtensions和allowedFileTypes 以,隔开 同时存在时忽略allowedFileExtensions`
    
 ## JS DEMO 上传文件
       $(function(){
@@ -38,8 +40,8 @@ bootstrap-fileinput  support cors-Domain
                       redirect:location.origin+"/fileinput/cors/result.html"
                   }
               },
-              allowedFileExtensions : ['jpg', 'png','gif','jpeg','bmp'],
-              allowedFileTypes: ['image'],
+              //allowedFileExtensions : ['jpg', 'png','gif','jpeg','bmp'],
+              //allowedFileTypes: ['image'],
               showUpload: false,
               slugCallback: function(filename) {//选择后未上传前 回调方法
                   return filename.replace('(', '_').replace(']', '_');
